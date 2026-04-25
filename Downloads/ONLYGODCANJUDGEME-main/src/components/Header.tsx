@@ -64,6 +64,13 @@ export default function Header() {
     return () => clearInterval(interval);
   }, [promoDismissed]);
 
+  // Linkleri her sayfadan anasayfaya dönecek ve kayacak şekilde güncelledik
+  const navLinks = [
+    { label: "Ürünler", href: "/homepage#products" },
+    { label: "Kampanya", href: "/homepage#campaign" },
+    { label: "Senin İçin", href: "/homepage#ai-quiz" }
+  ];
+
   return (
     <>
       {!promoDismissed && (
@@ -91,7 +98,7 @@ export default function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-7">
-            {[{ label: "Ürünler", href: "#products" }, { label: "Kampanya", href: "#campaign" }, { label: "Senin İçin", href: "#quiz" }].map((item) => (
+            {navLinks.map((item) => (
               <a key={item.href} href={item.href} className="text-[13.5px] font-medium text-[#8a8aaa] hover:text-[#1a1a2e] dark:hover:text-white transition-colors duration-200 tracking-[-0.01em]">{item.label}</a>
             ))}
           </nav>
@@ -130,7 +137,7 @@ export default function Header() {
 
       {menuOpen && (
         <div className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 md:hidden animate-fade-in" style={{ background: isDark ? "rgba(15,23,42,0.97)" : "rgba(253,252,251,0.97)", backdropFilter: "blur(24px)" }}>
-          {[{ label: "Ürünler", href: "#products" }, { label: "Kampanya", href: "#campaign" }, { label: "Senin İçin", href: "#quiz" }].map((item, i) => (
+          {navLinks.map((item, i) => (
             <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className={`text-3xl font-semibold tracking-[-0.03em] text-[#1a1a2e] dark:text-white hover:text-[#5aacf0] transition-colors duration-200 animate-fade-in-up delay-${(i + 1) * 100}`}>{item.label}</a>
           ))}
           <Link href="/cart" onClick={() => setMenuOpen(false)} className="text-3xl font-semibold tracking-[-0.03em] text-[#5aacf0] animate-fade-in-up delay-400">Sepet {totalItems > 0 && `(${totalItems})`}</Link>

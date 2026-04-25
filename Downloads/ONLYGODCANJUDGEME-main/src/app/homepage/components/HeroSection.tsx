@@ -88,9 +88,9 @@ export default function HeroSection() {
             <Link href="#products" className="w-full sm:w-auto px-8 py-4 rounded-full text-white font-bold flex items-center justify-center gap-2 hover:scale-105 transition-all duration-300 shadow-[0_10px_30px_rgba(90,172,240,0.3)]" style={{ background: "linear-gradient(135deg, #5aacf0 0%, #2ec4a0 100%)" }}>
               Ürünleri İncele <Icon name="ArrowRightIcon" size={18} />
             </Link>
-            <Link href="#quiz" className="w-full sm:w-auto px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 border-2 border-gray-200 dark:border-gray-800 text-[#1a1a2e] dark:text-white hover:border-[#5aacf0] dark:hover:border-[#5aacf0] transition-all duration-300">
-              Sen Hangi Lumina Tech'sin?
-            </Link>
+           <Link href="#ai-quiz" className="w-full sm:w-auto px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all hover:scale-105 text-[#1a1a2e] dark:text-white">
+  Sen Hangi Lumina Tech'sin?
+</Link>
           </div>
         </div>
 

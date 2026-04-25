@@ -3,8 +3,6 @@ import type { Metadata, Viewport } from "next";
 import { Orbitron, Manrope } from "next/font/google";
 import "@/styles/tailwind.css";
 import FomoNotification from "@/components/FomoNotification";
-
-// DİKKAT: CartProvider süslü parantez içinde olmalı!
 import { CartProvider } from "@/context/CartContext"; 
 import FloatingContact from "@/components/FloatingContact";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -51,7 +49,7 @@ export default function RootLayout({
           {children}
         </CartProvider>
         <FloatingContact />
-        <FomoNotification /> {/* İŞTE BURAYA EKLEDİK */}
+        <FomoNotification />
       </body>
     </html>
   );

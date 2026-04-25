@@ -3,212 +3,157 @@ import React, { useState } from "react";
 import Icon from "@/components/ui/AppIcon";
 import { useCart } from "@/context/CartContext";
 
-const productDatabase = [
+// YENİ ÜRÜNLERİN TAM LİSTESİ BURAYA EKLENDİ
+const products = [
+  { id: "aura-wristband", name: "Aura Wristband", price: 1299, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=600&auto=format&fit=crop" },
+  { id: "sonic-buds", name: "Sonic Buds", price: 899, image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=600&auto=format&fit=crop" },
+  { id: "nova-speaker", name: "Nova Speaker", price: 1599, image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?q=80&w=600&auto=format&fit=crop" },
+  { id: "samsung-galaxy-watch-8", name: "Samsung Galaxy Watch 8", price: 8999, image: "/assets/images/shopping__1_-1777058806780.webp" },
+  { id: "onvo-ov012-x-plus", name: "Onvo OV-012 X Plus", price: 12999, image: "/assets/images/shopping__1_-1777059056888.webp" },
+  { id: "valve-index-vr-kit-2", name: "Valve Index VR KIT", price: 24999, image: "/assets/images/shopping__1_-1777059597581.webp" },
+  { id: "jbl-boombox-3", name: "JBL Boombox 3", price: 9999, image: "/assets/images/shopping-1777059836243.webp" },
+  { id: "razer-ornata-v3", name: "Razer Ornata V3", price: 1899, image: "/assets/images/shopping__2_-1777060190645.webp" },
+  { id: "hawk-hm420", name: "Hawk Gaming HM420", price: 1499, image: "/assets/images/41fdGX8I5QL._AC_SX679_-1777060572109.jpg" }
+];
+
+const quizQuestions = [
   {
-    id: "aura-wristband",
-    name: "Aura Wristband",
-    category: "active",
-    priceNum: 1299,
-    priceStr: "₺1.299",
-    desc: "7/24 sağlık takibi ve GPS ile aktif yaşamın için mükemmel eşlik.",
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=600&auto=format&fit=crop"
+    question: "Bir teknoloji cihazında senin için en önemli olan nedir?",
+    options: ["Performans ve Güç", "Tasarım ve Estetik", "Taşınabilirlik", "Yenilikçi Özellikler"]
   },
   {
-    id: "sonic-buds",
-    name: "Sonic Buds",
-    category: "music",
-    priceNum: 899,
-    priceStr: "₺899",
-    desc: "40dB ANC ve kristal ses kalitesiyle müziğe gömülürsün.",
-    image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=600&auto=format&fit=crop"
+    question: "Günlük hayatta en çok hangi aktiviteye vakit ayırırsın?",
+    options: ["Oyun ve Eğlence", "İş ve Verimlilik", "Spor ve Sağlık", "Seyahat ve Keşif"]
   },
   {
-    id: "nova-speaker",
-    name: "Nova Speaker",
-    category: "social",
-    priceNum: 1599,
-    priceStr: "₺1.599",
-    desc: "360° surround ses ve 30 saat pil ile her ortamı doldur.",
-    image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?q=80&w=600&auto=format&fit=crop"
+    question: "Cihazlarının dış görünüşü nasıl olmalı?",
+    options: ["Modern ve Neon", "Minimalist ve Sade", "Renkli ve Enerjik", "Klasik ve Mat"]
+  },
+  {
+    question: "Bütçe önceliğin nedir?",
+    options: ["En İyi Performans (Premium)", "Fiyat/Performans Odaklı", "Ekonomik Çözümler", "Sınır Tanımayan Lüks"]
+  },
+  {
+    question: "Teknoloji senin için ne ifade ediyor?",
+    options: ["Bir Yaşam Tarzı", "Sadece Bir Araç", "Geleceğe Açılan Kapı", "Sosyal Bir Statü"]
   }
 ];
 
-const questions = [
-  {
-    id: 1, question: "Sabahları ilk yaptığın şey nedir?", emoji: "☕",
-    options: [
-      { value: "active", label: "Koşu veya Esneme", icon: "BoltIcon" },
-      { value: "music", label: "Müzik Açmak", icon: "MusicalNoteIcon" },
-      { value: "social", label: "Mesajlara Bakmak", icon: "UserGroupIcon" },
-    ],
-  },
-  {
-    id: 2, question: "Teknolojide en çok neye önem verirsin?", emoji: "🎯",
-    options: [
-      { value: "active", label: "Dayanıklılık", icon: "ShieldCheckIcon" },
-      { value: "music", label: "Ses Netliği", icon: "SpeakerWaveIcon" },
-      { value: "social", label: "Tasarım & Trend", icon: "SparklesIcon" },
-    ],
-  },
-  {
-    id: 3, question: "İdeal hafta sonun hangisi?", emoji: "⛰️",
-    options: [
-      { value: "active", label: "Doğa Yürüyüşü", icon: "MapIcon" },
-      { value: "music", label: "Evde Dinlenmek", icon: "HomeIcon" },
-      { value: "social", label: "Partilemek", icon: "UserGroupIcon" },
-    ],
-  },
-  {
-    id: 4, question: "Hangi renk paleti seni yansıtıyor?", emoji: "🎨",
-    options: [
-      { value: "active", label: "Neon & Enerjik", icon: "FireIcon" },
-      { value: "music", label: "Mat & Minimal", icon: "Squares2X2Icon" },
-      { value: "social", label: "Pastel & Canlı", icon: "FaceSmileIcon" },
-    ],
-  },
-  {
-    id: 5, question: "En çok nerede vakit geçirirsin?", emoji: "🏠",
-    options: [
-      { value: "active", label: "Spor Salonunda", icon: "TrophyIcon" },
-      { value: "music", label: "Kendi Odamda", icon: "HomeIcon" },
-      { value: "social", label: "Kafelerde", icon: "MapPinIcon" },
-    ],
-  },
-];
-
-function getResult(answers: string[]) {
-  if (answers.length === 0) return null;
-  const score: Record<string, number> = {};
-  answers.forEach((val) => { score[val] = (score[val] || 0) + 1; });
-  const topCategory = Object.keys(score).reduce((a, b) => (score[a] > score[b] ? a : b));
-  return productDatabase.find(p => p.category === topCategory) || productDatabase[0];
-}
-
 export default function AIStyleQuiz() {
-  const [step, setStep] = useState<"intro" | "quiz" | "result">("intro");
-  const [currentQ, setCurrentQ] = useState(0);
-  const [answers, setAnswers] = useState<string[]>([]);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [step, setStep] = useState(0); 
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [loading, setLoading] = useState(false);
   const { addItem } = useCart();
-  const [addedToCart, setAddedToCart] = useState(false);
 
-  const handleStart = () => setStep("quiz");
-
-  const handleOption = (value: string) => {
-    setSelected(value);
-    setTimeout(() => {
-      const newAnswers = [...answers, value];
-      if (currentQ + 1 < questions.length) {
-        setAnswers(newAnswers);
-        setCurrentQ(currentQ + 1);
-        setSelected(null);
-      } else {
-        setAnswers(newAnswers);
-        setStep("result");
-      }
-    }, 400);
+  const getRecommendedProducts = () => {
+    // Tüm ürünler arasından rastgele 2 tane seçer (Yeni ürünler dahil)
+    const shuffled = [...products].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 2);
   };
 
-  const handleReset = () => {
-    setStep("intro");
-    setCurrentQ(0);
-    setAnswers([]);
-    setSelected(null);
-    setAddedToCart(false);
+  const handleNext = () => {
+    if (currentQuestion < quizQuestions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        setStep(2);
+      }, 2500);
+    }
   };
 
-  const result = step === "result" ? getResult(answers) : null;
-
-  const handleAddToCart = () => {
-    if (!result) return;
-    addItem({ id: result.id, name: result.name, price: result.priceNum, image: result.image });
-    setAddedToCart(true);
+  const resetQuiz = () => {
+    setStep(0);
+    setCurrentQuestion(0);
   };
 
   return (
-    <section id="quiz" className="py-20 md:py-28 bg-[#f7f9fc] dark:bg-[#0a0f1c] transition-colors duration-500">
-      <div className="max-w-[680px] mx-auto px-5">
-        <div className="text-center mb-10">
-          <p className="apple-label mb-3">Tarzını Seç</p>
-          <h2 className="text-[2rem] md:text-[2.5rem] font-bold leading-[1.08] text-[#1a1a2e] dark:text-white transition-colors" style={{ letterSpacing: "-0.04em" }}>
-            Sana Özel Lumina Tech'i
-          </h2>
-          <p className="text-[17px] font-light mt-3 text-[#8a8aaa] dark:text-gray-400 transition-colors" style={{ letterSpacing: "-0.01em" }}>
-            bulmana yardım edelim
-          </p>
-        </div>
+    // scroll-mt-24 eklendi: Kaydırma yapıldığında Header'ın altında kalmaması için
+    <section id="ai-quiz" className="py-24 bg-gray-50 dark:bg-[#0a0f1c] transition-colors duration-500 relative overflow-hidden scroll-mt-24">
+      {/* Arka plan hafif neon efektleri */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#5aacf0] rounded-full mix-blend-multiply filter blur-[128px] opacity-20 dark:opacity-10 animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#a78bfa] rounded-full mix-blend-multiply filter blur-[128px] opacity-20 dark:opacity-10 animate-pulse delay-1000"></div>
 
-        <div className="rounded-[28px] p-8 md:p-10 bg-white/80 dark:bg-[#111827]/80 backdrop-blur-[24px] border border-white/90 dark:border-gray-800 shadow-[0_8px_40px_rgba(90,172,240,0.10)] dark:shadow-none transition-colors duration-500">
-          {step === "intro" && (
-            <div className="text-center animate-fade-in">
-              <div className="text-5xl mb-6">LuminAI</div>
-              <h3 className="text-[22px] font-semibold mb-3 tracking-[-0.02em] text-[#1a1a2e] dark:text-white transition-colors">
-                5 Soru, 1 Mükemmel Eşleşme
-              </h3>
-              <p className="text-[15px] leading-relaxed mb-8 max-w-sm mx-auto text-[#8a8aaa] dark:text-gray-400 transition-colors">
-                Yaşam tarzına göre en uygun Lumina Tech ürününü sana önerelim. Sadece 45 saniyeni alacak!
-              </p>
-              <button onClick={handleStart} className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-white text-[15px] font-medium tracking-[-0.01em] transition-all duration-250 hover:scale-[1.02] shadow-[0_8px_24px_rgba(90,172,240,0.30)]" style={{ background: "linear-gradient(135deg, #5aacf0 0%, #2ec4a0 100%)" }}>
-                Quize Başla <Icon name="ArrowRightIcon" size={15} />
-              </button>
+      <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+        {step === 0 ? (
+          <div className="text-center max-w-2xl mx-auto animate-fade-in">
+            
+            {/* HAFİF ANİMASYONLU AI SİMGESİ */}
+            <div className="relative w-28 h-28 mx-auto mb-10">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#5aacf0] to-[#a78bfa] rounded-full blur-xl opacity-30 dark:opacity-50 animate-pulse"></div>
+              <div className="relative w-full h-full bg-white dark:bg-[#111827] border border-gray-100 dark:border-white/10 rounded-full flex items-center justify-center shadow-2xl animate-[bounce_3s_ease-in-out_infinite]">
+                 <Icon name="SparklesIcon" size={48} className="text-[#5aacf0] dark:text-[#a78bfa]" />
+              </div>
             </div>
-          )}
 
-          {step === "quiz" && (
-            <div className="animate-fade-in">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="flex-1 h-1.5 rounded-full overflow-hidden bg-slate-200/80 dark:bg-gray-700">
-                  <div className="h-full rounded-full transition-all duration-500" style={{ width: `${((currentQ + 1) / questions.length) * 100}%`, background: "linear-gradient(90deg, #5aacf0 0%, #2ec4a0 100%)" }} />
+            <h3 className="text-5xl font-black text-[#1a1a2e] dark:text-white mb-6 tracking-tighter transition-colors">AI Stil Analizi</h3>
+            <p className="text-gray-500 dark:text-gray-400 mb-10 text-lg transition-colors">5 soruda tarzına en uygun teknolojik ekosistemi belirleyelim.</p>
+            <button onClick={() => setStep(1)} className="px-12 py-5 bg-[#1a1a2e] dark:bg-white text-white dark:text-black rounded-[24px] font-bold shadow-[0_10px_30px_rgba(90,172,240,0.2)] dark:shadow-[0_10px_30px_rgba(255,255,255,0.1)] hover:-translate-y-1 hover:scale-105 transition-all duration-300">
+              Analizi Başlat
+            </button>
+          </div>
+        ) : step === 1 ? (
+          <div className="max-w-xl mx-auto bg-white dark:bg-[#111827] p-10 rounded-[40px] border border-gray-100 dark:border-white/5 shadow-2xl transition-colors">
+            {loading ? (
+              <div className="py-20 text-center animate-fade-in">
+                <div className="relative w-20 h-20 mx-auto mb-8">
+                  <div className="absolute inset-0 border-4 border-[#5aacf0]/30 rounded-full"></div>
+                  <div className="absolute inset-0 border-4 border-[#5aacf0] border-t-transparent rounded-full animate-spin"></div>
+                  <Icon name="CpuChipIcon" size={32} className="absolute inset-0 m-auto text-[#a78bfa] animate-pulse" />
                 </div>
-                <span className="text-[12px] whitespace-nowrap text-[#8a8aaa] dark:text-gray-400">{currentQ + 1} / {questions.length}</span>
+                <p className="font-bold text-[#1a1a2e] dark:text-white animate-pulse italic transition-colors">Stilin analiz ediliyor...</p>
               </div>
-
-              <div className="text-center mb-8">
-                <div className="text-4xl mb-4">{questions[currentQ].emoji}</div>
-                <h3 className="text-[20px] md:text-[22px] font-semibold tracking-[-0.02em] text-[#1a1a2e] dark:text-white transition-colors">
-                  {questions[currentQ].question}
-                </h3>
+            ) : (
+              <div className="animate-fade-in">
+                <div className="flex justify-between items-center mb-8">
+                   <span className="text-xs font-bold text-[#5aacf0] uppercase tracking-widest">Soru {currentQuestion + 1} / 5</span>
+                   <div className="w-32 h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-[#5aacf0] to-[#a78bfa] rounded-full transition-all duration-500" style={{ width: `${(currentQuestion + 1) * 20}%` }}></div>
+                   </div>
+                </div>
+                <h4 className="text-2xl font-bold text-[#1a1a2e] dark:text-white mb-8 leading-tight transition-colors">{quizQuestions[currentQuestion].question}</h4>
+                <div className="space-y-4">
+                  {quizQuestions[currentQuestion].options.map((opt) => (
+                    <button key={opt} onClick={handleNext} className="w-full p-5 text-left rounded-2xl border border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-transparent hover:bg-[#5aacf0]/10 dark:hover:bg-white/5 hover:border-[#5aacf0]/50 dark:hover:border-white/10 transition-all duration-300 font-medium text-gray-700 dark:text-gray-300">
+                      {opt}
+                    </button>
+                  ))}
+                </div>
               </div>
+            )}
+          </div>
+        ) : (
+          <div className="bg-white/80 dark:bg-[#111827]/80 backdrop-blur-2xl p-10 rounded-[40px] border border-gray-100 dark:border-white/5 animate-fade-in text-center max-w-4xl mx-auto shadow-2xl transition-colors">
+            
+            <div className="w-16 h-16 bg-gradient-to-tr from-[#5aacf0] to-[#a78bfa] rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+               <Icon name="CheckIcon" size={32} className="text-white" />
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {questions[currentQ].options.map((opt) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => handleOption(opt.value)}
-                    className="relative rounded-[16px] p-5 text-left transition-all duration-200 border"
-                    style={selected === opt.value ? { background: "linear-gradient(135deg, #5aacf0 0%, #2ec4a0 100%)", borderColor: "transparent", color: "white", transform: "scale(0.98)", boxShadow: "0 8px 24px rgba(90,172,240,0.30)" } : {}}
-                    // Tailwind class'ları ile dark mode renkleri:
-                    {...(!selected || selected !== opt.value ? { className: "relative rounded-[16px] p-5 text-left transition-all duration-200 border border-slate-200 dark:border-gray-700 bg-slate-50/90 dark:bg-gray-800 text-[#1a1a2e] dark:text-gray-200 hover:bg-white dark:hover:bg-gray-700" } : {})}
+            <h2 className="text-4xl font-black text-[#1a1a2e] dark:text-white mb-2 tracking-tighter transition-colors">Senin İçin Seçtiklerimiz</h2>
+            <p className="text-gray-500 dark:text-gray-400 mb-10 transition-colors">Yapay zeka asistanımız karakterine en uygun ürünleri eşleştirdi.</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+              {getRecommendedProducts().map((product) => (
+                <div key={product.id} className="bg-white dark:bg-[#0a0f1c]/50 p-8 rounded-[32px] border border-gray-100 dark:border-white/5 flex flex-col items-center group transition-all duration-500 hover:-translate-y-2 hover:shadow-xl">
+                  <div className="relative w-32 h-32 mb-6">
+                    <div className="absolute inset-0 bg-[#5aacf0] rounded-full blur-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+                    <img src={product.image} alt={product.name} className="relative z-10 w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
+                  </div>
+                  <h4 className="font-bold text-[#1a1a2e] dark:text-white mb-2 transition-colors">{product.name}</h4>
+                  <p className="text-[#5aacf0] font-black mb-6 text-xl">₺{product.price.toLocaleString('tr-TR')}</p>
+                  <button 
+                    onClick={() => addItem({ id: product.id, name: product.name, price: product.price, image: product.image })}
+                    className="w-full py-4 bg-[#1a1a2e] dark:bg-white text-white dark:text-black rounded-2xl font-bold hover:scale-[1.02] active:scale-95 transition-all shadow-md"
                   >
-                    <Icon name={opt.icon as any} size={20} className="mb-3" style={{ color: selected === opt.value ? "white" : "#5aacf0" } as React.CSSProperties} />
-                    <p className="text-[13px] font-medium tracking-[-0.01em]">{opt.label}</p>
+                    Sepete Ekle
                   </button>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
-          )}
-
-          {step === "result" && result && (
-            <div className="text-center animate-fade-in">
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-[#5aacf0]/20" style={{ background: "linear-gradient(135deg, rgba(90,172,240,0.15) 0%, rgba(46,196,160,0.15) 100%)" }}>
-                <Icon name="SparklesIcon" size={28} style={{ color: "#5aacf0" } as React.CSSProperties} />
-              </div>
-              <p className="apple-label mb-2">Senin için seçtik</p>
-              <h3 className="text-[26px] font-bold mb-2 tracking-[-0.03em] text-[#1a1a2e] dark:text-white transition-colors">{result.name}</h3>
-              <p className="text-[15px] mb-2 max-w-xs mx-auto leading-relaxed text-[#8a8aaa] dark:text-gray-400 transition-colors">{result.desc}</p>
-              <p className="text-[24px] font-bold mb-8 tracking-[-0.03em]" style={{ background: "linear-gradient(90deg, #5aacf0 0%, #2ec4a0 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{result.priceStr}</p>
-              
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <button onClick={handleAddToCart} disabled={addedToCart} className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full text-white text-[15px] font-medium tracking-[-0.01em] transition-all duration-200 hover:scale-[1.01]" style={addedToCart ? { background: "rgba(46,196,160,0.2)", color: "#2ec4a0", border: "1px solid rgba(46,196,160,0.3)" } : { background: "linear-gradient(135deg, #5aacf0 0%, #2ec4a0 100%)", boxShadow: "0 8px 24px rgba(90,172,240,0.28)" }}>
-                  {addedToCart ? "✓ Sepete Eklendi" : "Sepete Ekle"}
-                </button>
-                <button onClick={handleReset} className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full text-[15px] font-medium transition-all duration-200 hover:scale-[1.01] text-[#5aacf0] border border-[#5aacf0]/30 bg-[#5aacf0]/5 dark:hover:bg-[#5aacf0]/10">
-                  Tekrar Dene
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+            <button onClick={resetQuiz} className="text-sm font-bold text-gray-400 hover:text-[#5aacf0] transition-colors">Testi Baştan Çöz</button>
+          </div>
+        )}
       </div>
     </section>
   );
